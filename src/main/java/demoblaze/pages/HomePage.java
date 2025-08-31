@@ -1,5 +1,6 @@
 package demoblaze.pages;
 
+import demoblaze.components.LoginModal;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -30,6 +31,8 @@ public class HomePage extends BasePage {
     // Actions
     public void clickLoginLink() {
         click(loginLink);
+        LoginModal modal = new LoginModal(driver);
+        modal.waitForModalVisible();
     }
 
     public void clickProductDetail() {

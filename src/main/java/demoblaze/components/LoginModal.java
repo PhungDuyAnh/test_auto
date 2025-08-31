@@ -28,6 +28,14 @@ public class LoginModal extends BasePage {
         PageFactory.initElements(new AjaxElementLocatorFactory(driver, 10), this);
     }
 
+    public void waitForModalVisible() {
+        waitForVisibility(loginModal);
+    }
+
+    public void waitForModalInvisible() {
+        waitForInvisibility(loginModal);
+    }
+
     public void enterUsername(String username) {
         set(usernameField, username);
     }
@@ -38,7 +46,7 @@ public class LoginModal extends BasePage {
 
     public void clickLoginButton() {
         click(loginButton);
-        waitForInvisibility(loginModal);
+        waitForModalInvisible();
     }
 
     // Convenience: login method
