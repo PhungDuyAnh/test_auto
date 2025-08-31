@@ -1,4 +1,4 @@
-package saucedemo.pages;
+package demoblaze.pages;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -20,12 +20,31 @@ public class BasePage {
         return wait.until(ExpectedConditions.visibilityOf(element));
     }
 
+    protected void waitForInvisibility(WebElement element) {
+        wait.until(ExpectedConditions.invisibilityOf(element));
+    }
+
     protected WebElement waitForClickable(WebElement element) {
         return wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
+    protected void waitForAlertIsPresentAndAccept() {
+        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+        alert.accept();
+    }
+
     protected void click(WebElement element) {
-        waitForClickable(element).click();
+        try {
+            waitForClickable(element).click();
+        } catch (ElementClickInterceptedException e) {
+            // Scroll into view and retry with JS click fallback
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+            try {
+                waitForClickable(element).click();
+            } catch (Exception ex) {
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            }
+        }
     }
 
     protected void set(WebElement element, String value) {

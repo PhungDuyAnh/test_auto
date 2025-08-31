@@ -7,11 +7,10 @@ import saucedemo.base.BaseTest;
 public class LoginTest extends BaseTest {
 
     @Test
-    public void TestLogin() {
-        loginPage.setUserName("standard_user");
-        loginPage.setPassword("xxx");
-        loginPage.clickLoginButton();
+    public void shouldShowErrorWhenPasswordIncorrect() {
+        loginPage.login("standard_user", "xxx");
         String actualMessage = loginPage.getErrorMessage();
-        Assert.assertTrue(actualMessage.contains("Epic"));
+        Assert.assertTrue(actualMessage.toLowerCase().contains("epic"),
+                "Expected error message to contain 'Epic' but was: " + actualMessage);
     }
 }

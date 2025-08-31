@@ -1,4 +1,4 @@
-package practices;
+package learn.practice;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Alert;

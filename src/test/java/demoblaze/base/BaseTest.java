@@ -1,19 +1,27 @@
-package saucedemo.base;
+package demoblaze.base;
 
+import demoblaze.components.InformationOrderModal;
+import demoblaze.components.LoginModal;
+import demoblaze.pages.OrderPage;
+import demoblaze.pages.ProductDetailPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-import saucedemo.pages.LoginPage;
+import demoblaze.pages.HomePage;
 
 import java.time.Duration;
 
 public class BaseTest {
     protected WebDriver driver;
-    protected LoginPage loginPage;
-    protected final String BASE_URL = "https://www.saucedemo.com/";
+    protected HomePage homePage;
+    protected LoginModal loginModal;
+    protected ProductDetailPage productDetailPage;
+    protected OrderPage orderPage;
+    protected InformationOrderModal informationOrderModal;
+    protected final String BASE_URL = "https://www.demoblaze.com/index.html";
 
     @BeforeClass(alwaysRun = true)
     public void beforeClass() {
@@ -27,10 +35,11 @@ public class BaseTest {
     @BeforeMethod(alwaysRun = true)
     public void beforeMethod() {
         driver.get(BASE_URL);
-        loginPage = new LoginPage(driver);
-        if (!loginPage.isAt()) {
-            throw new IllegalStateException("Login page did not load correctly");
-        }
+        homePage = new HomePage(driver);
+        loginModal = new LoginModal(driver);
+        productDetailPage = new ProductDetailPage(driver);
+        orderPage = new OrderPage(driver);
+        informationOrderModal = new InformationOrderModal(driver);
     }
 
     @AfterClass(alwaysRun = true)

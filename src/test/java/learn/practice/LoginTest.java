@@ -1,4 +1,4 @@
-package practices;
+package learn.practice;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
@@ -29,7 +29,8 @@ public class LoginTest {
         driver.get("https://github.com/");
         String title = driver.getTitle();
         // ví dụ kiểm tra title
-        Assert.assertTrue(title.contains("GitHub") || title.length() > 0, "Page title check");
+        Assert.assertNotNull(title);
+        Assert.assertFalse(title.isEmpty(), "Page title check");
     }
 
     @Test(priority = 2)

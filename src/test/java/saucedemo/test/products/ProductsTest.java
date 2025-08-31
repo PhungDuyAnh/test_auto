@@ -7,9 +7,8 @@ import saucedemo.base.BaseTest;
 
 public class ProductsTest extends BaseTest {
     @Test
-    public void testProductsHeaderIsDisplayed()
-    {
-        ProductsPage productsPage = loginPage.logIntoApplication("standard_user","secret_sauce");
-        Assert.assertTrue(productsPage.isProductsHeaderDisplayed(), "Products Header is displayed");
+    public void testProductsHeaderIsDisplayed() {
+        ProductsPage productsPage = loginPage.login("standard_user","secret_sauce");
+        Assert.assertTrue(productsPage.isProductsHeaderDisplayed(), "Products header should be displayed");
     }
 }

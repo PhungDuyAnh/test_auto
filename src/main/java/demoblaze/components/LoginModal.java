@@ -1,33 +1,33 @@
-package saucedemo.pages;
+package demoblaze.components;
 
+import demoblaze.pages.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 
-public class LoginPage extends BasePage{
+public class LoginModal extends BasePage {
 
     // PageFactory elements
-    @FindBy(id = "user-name")
+    @FindBy(xpath = "//input[@id='loginusername']")
     private WebElement usernameField;
 
-    @FindBy(id = "password")
+    @FindBy(xpath = "//input[@id='loginpassword']")
     private WebElement passwordField;
 
-    @FindBy(id = "login-button")
+    @FindBy(xpath = "//button[@onclick='logIn()']")
     private WebElement loginButton;
 
-    @FindBy(xpath = "//h3[@data-test='error']")
-    private WebElement errorMessageField;
+    @FindBy(xpath = "//div[@id='logInModal']")
+    private WebElement loginModal;
 
     // Constructor - use AjaxElementLocatorFactory to allow waiting for elements
-    public LoginPage(WebDriver driver) {
+    public LoginModal(WebDriver driver) {
         super(driver);
         PageFactory.initElements(new AjaxElementLocatorFactory(driver, 10), this);
     }
 
-    // Actions
     public void enterUsername(String username) {
         set(usernameField, username);
     }
@@ -36,24 +36,15 @@ public class LoginPage extends BasePage{
         set(passwordField, password);
     }
 
-    public ProductsPage clickLoginButton() {
+    public void clickLoginButton() {
         click(loginButton);
-        return new ProductsPage(driver);
+        waitForInvisibility(loginModal);
     }
 
     // Convenience: login method
-    public ProductsPage login(String username, String password) {
+    public void login(String username, String password) {
         enterUsername(username);
         enterPassword(password);
-        return clickLoginButton();
-    }
-
-    // Getters / checks
-    public String getErrorMessage() {
-        return getText(errorMessageField);
-    }
-
-    public boolean isAt() {
-        return isDisplayedSafe(usernameField);
+        clickLoginButton();
     }
 }
