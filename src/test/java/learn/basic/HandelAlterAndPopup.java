@@ -21,7 +21,7 @@ public class HandelAlterAndPopup {
         Alert alert = driver.switchTo().alert();
 
         // Capturing alert message.
-        String alertMessage= driver.switchTo().alert().getText();
+        String alertMessage= alert.getText();
 
         // Displaying alert message
         System.out.println(alertMessage);

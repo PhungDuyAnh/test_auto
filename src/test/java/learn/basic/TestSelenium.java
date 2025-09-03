@@ -25,6 +25,7 @@ public class TestSelenium {
          * compare the actual title of the page with the expected one and print
          * the result as "Passed" or "Failed"
          */
+        assert actualTitle != null;
         if (actualTitle.contentEquals(expectedTitle)){
             System.out.println("Test Passed!");
         } else {

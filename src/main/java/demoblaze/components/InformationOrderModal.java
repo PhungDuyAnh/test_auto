@@ -11,22 +11,22 @@ public class InformationOrderModal extends BasePage {
 
     // PageFactory elements
     @FindBy(xpath = "//input[@id='name']")
-    private WebElement nameFiled;
+    private WebElement nameField;
 
     @FindBy(xpath = "//input[@id='country']")
-    private WebElement countryFiled;
+    private WebElement countryField;
 
     @FindBy(xpath = "//input[@id='city']")
-    private WebElement cityFiled;
+    private WebElement cityField;
 
     @FindBy(xpath = "//input[@id='card']")
-    private WebElement cardFiled;
+    private WebElement cardField;
 
     @FindBy(xpath = "//input[@id='month']")
-    private WebElement monthFiled;
+    private WebElement monthField;
 
     @FindBy(xpath = "//input[@id='year']")
-    private WebElement yearFiled;
+    private WebElement yearField;
 
     @FindBy(xpath = "//button[@onclick='purchaseOrder()']")
     private WebElement buttonPurchaseOrder;
@@ -44,27 +44,27 @@ public class InformationOrderModal extends BasePage {
     }
 
     public void enterNameFiled(String name) {
-        set(nameFiled, name);
+        set(nameField, name);
     }
 
     public void enterCountryFiled(String country) {
-        set(countryFiled, country);
+        set(countryField, country);
     }
 
     public void enterCityFiled(String city) {
-        set(cityFiled, city);
+        set(cityField, city);
     }
 
     public void enterCardFiled(String card) {
-        set(cardFiled, card);
+        set(cardField, card);
     }
 
     public void enterMonthFiled(String month) {
-        set(monthFiled, month);
+        set(monthField, month);
     }
 
     public void enterYearFiled(String year) {
-        set(yearFiled, year);
+        set(yearField, year);
     }
 
     public void clickButtonPurchaseOrder() {
