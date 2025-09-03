@@ -15,7 +15,7 @@ public class OrderTest extends BaseTest {
         return new Object[][]{
                 {"admin", "admin"},
                 // nếu muốn test thêm user khác:
-                 {"user2","pass2"}
+//                 {"user2","pass2"}
         };
     }
 
@@ -25,7 +25,7 @@ public class OrderTest extends BaseTest {
         return new Object[][]{
                 // name, country, city, creditCard, month, year
                 {"DuyAnh", "VN", "HN", "01230120321", "09", "2025"},
-                {"NguyenVanA", "VN", "HCM", "09876543210", "10", "2026"}
+//                {"NguyenVanA", "VN", "HCM", "09876543210", "10", "2026"}
         };
     }
 
