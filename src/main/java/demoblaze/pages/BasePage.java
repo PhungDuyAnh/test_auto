@@ -1,24 +1,25 @@
 package demoblaze.pages;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Duration;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class BasePage {
+
     protected WebDriver driver;
+
     protected WebDriverWait wait;
+
     private static final Duration TIMEOUT = Duration.ofSeconds(10);
+
+    private static final Logger logger = LogManager.getLogger(BasePage.class);
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
@@ -78,44 +79,36 @@ public class BasePage {
         }
     }
 
+
     // Logging helper
     protected void log(String message) {
-        System.out.println("[BasePage] " + message);
+        logger.info(message);
     }
 
-    // Screenshot helper
-    protected String takeScreenshot(String name) {
-        File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String filePath = "screenshots/" + name + "_" + timestamp + ".png";
-        try {
-            Files.createDirectories(Paths.get("screenshots"));
-            Files.copy(srcFile.toPath(), Paths.get(filePath));
-            log("Screenshot saved: " + filePath);
-        } catch (IOException e) {
-            log("Failed to save screenshot: " + e.getMessage());
-        }
-        return filePath;
-    }
 
     // Navigation helpers
     protected void goTo(String url) {
         driver.get(url);
     }
+
     protected void back() {
         driver.navigate().back();
     }
+
     protected void refresh() {
         driver.navigate().refresh();
     }
+
 
     // Generic find methods
     protected WebElement findElement(By by) {
         return driver.findElement(by);
     }
+
     protected List<WebElement> findElements(By by) {
         return driver.findElements(by);
     }
+
 
     // Dropdown select
     protected void selectByVisibleText(WebElement element, String text) {
@@ -123,15 +116,18 @@ public class BasePage {
         select.selectByVisibleText(text);
     }
 
+
     // Mouse actions
     protected void hover(WebElement element) {
         Actions actions = new Actions(driver);
         actions.moveToElement(waitForVisibility(element)).perform();
     }
+
     protected void dragAndDrop(WebElement source, WebElement target) {
         Actions actions = new Actions(driver);
         actions.dragAndDrop(waitForVisibility(source), waitForVisibility(target)).perform();
     }
+
 
     // File upload
     protected void uploadFile(WebElement element, String filePath) {

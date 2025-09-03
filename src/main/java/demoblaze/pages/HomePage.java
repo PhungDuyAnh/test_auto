@@ -13,6 +13,9 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//a[@id='login2']")
     private WebElement loginLink;
 
+    @FindBy(xpath = "//a[@id='logout2']")
+    private WebElement logoutLink;
+
     @FindBy(xpath = "//a[@id='nameofuser']")
     private WebElement nameOfUser;
 
@@ -35,6 +38,10 @@ public class HomePage extends BasePage {
         modal.waitForModalVisible();
     }
 
+    public void clickLogoutLink() {
+        click(logoutLink);
+    }
+
     public void clickProductDetail() {
         click(productDetail);
     }
@@ -45,5 +52,9 @@ public class HomePage extends BasePage {
 
     public String getNameOfUser() {
         return getText(nameOfUser);
+    }
+
+    public boolean isUserLoggedIn() {
+        return isDisplayedSafe(nameOfUser);
     }
 }

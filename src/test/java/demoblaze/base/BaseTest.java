@@ -4,6 +4,7 @@ import demoblaze.components.InformationOrderModal;
 import demoblaze.components.LoginModal;
 import demoblaze.pages.OrderPage;
 import demoblaze.pages.ProductDetailPage;
+import demoblaze.utils.ScreenshotUtils;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -17,6 +18,8 @@ import org.testng.annotations.Optional;
 import demoblaze.pages.HomePage;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.OutputType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +37,7 @@ public class BaseTest {
     protected OrderPage orderPage;
     protected InformationOrderModal informationOrderModal;
     protected final String BASE_URL = "https://www.demoblaze.com/index.html";
+    private static final Logger logger = LogManager.getLogger(BaseTest.class);
 
     // alwaysRun = true : test này vẫn sẽ được chạy dù test khác failed
     @Parameters({"browser"})
@@ -60,38 +64,32 @@ public class BaseTest {
     public void beforeMethod() {
         log("Navigating to base URL: " + BASE_URL);
         driver.get(BASE_URL);
-        homePage = new HomePage(driver);
-        loginModal = new LoginModal(driver);
-        productDetailPage = new ProductDetailPage(driver);
-        orderPage = new OrderPage(driver);
-        informationOrderModal = new InformationOrderModal(driver);
+        if (homePage == null) homePage = new HomePage(driver);
+        if (loginModal == null) loginModal = new LoginModal(driver);
+        if (productDetailPage == null) productDetailPage = new ProductDetailPage(driver);
+        if (orderPage == null) orderPage = new OrderPage(driver);
+        if (informationOrderModal == null) informationOrderModal = new InformationOrderModal(driver);
     }
 
     @AfterClass(alwaysRun = true)
     public void afterClass() {
         log("Quitting WebDriver");
         if (driver != null) {
-            driver.quit();
+            try {
+                driver.quit();
+            } catch (Exception e) {
+                log("Error quitting WebDriver: " + e.getMessage());
+            }
         }
     }
 
     // Logging helper
     protected void log(String message) {
-        System.out.println("[BaseTest] " + message);
+        logger.info(message);
     }
 
     // Screenshot helper for listener
     public String takeScreenshot(String name) {
-        File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String filePath = "screenshots/" + name + "_" + timestamp + ".png";
-        try {
-            Files.createDirectories(Paths.get("screenshots"));
-            Files.copy(srcFile.toPath(), Paths.get(filePath));
-            log("Screenshot saved: " + filePath);
-        } catch (IOException e) {
-            log("Failed to save screenshot: " + e.getMessage());
-        }
-        return filePath;
+        return ScreenshotUtils.takeScreenshot(driver, name);
     }
 }
