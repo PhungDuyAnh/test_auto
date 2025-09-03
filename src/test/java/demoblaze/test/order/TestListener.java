@@ -3,86 +3,50 @@ package demoblaze.test.order;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-
-import java.util.Arrays;
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import demoblaze.utils.ExtentManager;
 
 public class TestListener implements ITestListener {
-
-    private String testName(ITestResult result) {
-        // result.getName() trả về tên method, bạn có thể đổi sang result.getMethod().getMethodName()
-        return result.getName();
-    }
+    private static ExtentReports extent = ExtentManager.getInstance();
+    private static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
 
     @Override
     public void onTestStart(ITestResult result) {
-        System.out.println("=== onTestStart ===");
-        System.out.println("Test started: " + testName(result));
-        if (result.getParameters() != null && result.getParameters().length > 0) {
-            System.out.println("Parameters: " + Arrays.toString(result.getParameters()));
-        }
+        ExtentTest extentTest = extent.createTest(result.getMethod().getMethodName());
+        test.set(extentTest);
     }
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        System.out.println("=== onTestSuccess ===");
-        System.out.println("The name of the testcase passed is : " + testName(result));
-        long duration = result.getEndMillis() - result.getStartMillis();
-        System.out.println("Duration (ms): " + duration);
+        test.get().log(Status.PASS, "Test passed");
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
-        System.out.println("=== onTestFailure ===");
-        System.out.println("The name of the testcase failed is : " + testName(result));
-        Throwable t = result.getThrowable();
-        if (t != null) {
-            System.out.println("Failure message: " + t.getMessage());
-            // Nếu muốn in full stack trace:
-            t.printStackTrace(System.out);
-        }
-        if (result.getParameters() != null && result.getParameters().length > 0) {
-            System.out.println("Parameters: " + Arrays.toString(result.getParameters()));
-        }
-        // Capture screenshot on failure if test class is BaseTest or subclass
+        test.get().log(Status.FAIL, "Test failed: " + result.getThrowable());
+        // Đính kèm screenshot nếu có
         Object testInstance = result.getInstance();
         try {
             Class<?> baseTestClass = Class.forName("demoblaze.base.BaseTest");
             if (baseTestClass.isInstance(testInstance)) {
                 String screenshotPath = (String) baseTestClass.getMethod("takeScreenshot", String.class)
-                        .invoke(testInstance, testName(result));
-                System.out.println("Screenshot captured: " + screenshotPath);
+                        .invoke(testInstance, result.getMethod().getMethodName());
+                test.get().addScreenCaptureFromPath(screenshotPath);
             }
         } catch (Exception e) {
-            System.out.println("Failed to capture screenshot: " + e.getMessage());
+            test.get().log(Status.WARNING, "Không thể chụp screenshot: " + e.getMessage());
         }
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        System.out.println("=== onTestSkipped ===");
-        System.out.println("The name of the testcase Skipped is : " + testName(result));
-        Throwable t = result.getThrowable();
-        if (t != null) {
-            System.out.println("Skip reason: " + t.getMessage());
-        }
-    }
-
-    @Override
-    public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-        System.out.println("=== onTestFailedButWithinSuccessPercentage ===");
-        System.out.println("Test failed but within success percentage: " + testName(result));
-    }
-
-    @Override
-    public void onStart(ITestContext context) {
-        System.out.println("=== onStart ===");
-        System.out.println("Starting test context: " + context.getName());
+        test.get().log(Status.SKIP, "Test skipped: " + result.getThrowable());
     }
 
     @Override
     public void onFinish(ITestContext context) {
-        System.out.println("=== onFinish ===");
-        System.out.println("Finished test context: " + context.getName());
-        System.out.println("Total tests run: " + context.getAllTestMethods().length);
+        extent.flush();
     }
 }
