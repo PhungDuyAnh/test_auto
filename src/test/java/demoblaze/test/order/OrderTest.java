@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 @Listeners(TestListener.class)
 public class OrderTest extends BaseTest {
 
-    @Test(dataProvider = "loginData", dataProviderClass = DataProviders.class)
+    @Test(dataProvider = "loginData", dataProviderClass = DataProviders.class, groups = {"smoke"})
     public void testLoginSuccess(String username, String password) {
         homePage.clickLoginLink();
         loginModal.login(username,password);
