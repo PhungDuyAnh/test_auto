@@ -5,6 +5,7 @@ import demoblaze.components.LoginModal;
 import demoblaze.pages.OrderPage;
 import demoblaze.pages.ProductDetailPage;
 import demoblaze.utils.ScreenshotUtils;
+import demoblaze.utils.ConfigReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -27,7 +28,7 @@ public class BaseTest {
     protected ProductDetailPage productDetailPage;
     protected OrderPage orderPage;
     protected InformationOrderModal informationOrderModal;
-    protected final String BASE_URL = "https://www.demoblaze.com/index.html";
+    protected final String BASE_URL = ConfigReader.get("base.url");
     private static final Logger logger = LogManager.getLogger(BaseTest.class);
 
     // alwaysRun = true : test này vẫn sẽ được chạy dù test khác failed
