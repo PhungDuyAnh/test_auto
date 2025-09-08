@@ -67,13 +67,25 @@ public class InformationOrderModal extends BasePage {
         set(yearField, year);
     }
 
-    public void clickButtonPurchaseOrder() {
+    public void clickButtonPurchaseButton() {
         click(buttonPurchaseOrder);
+    }
+
+    public void clickButtonPurchaseOrderSuccess() {
+        clickButtonPurchaseButton();
         waitForInvisibility(modalContentPurchase);
+    }
+
+    public void clickButtonPurchaseOrderFail(){
+        clickButtonPurchaseButton();
     }
 
     public void clickOKButton() {
         click(okButton);
+    }
+
+    public String getOrderAlterText() {
+        return getAlertTextAndAccept();
     }
 
     // Convenience: input order information
@@ -84,7 +96,5 @@ public class InformationOrderModal extends BasePage {
         enterCardFiled(card);
         enterMonthFiled(month);
         enterYearFiled(year);
-        clickButtonPurchaseOrder();
-        clickOKButton();
     }
 }

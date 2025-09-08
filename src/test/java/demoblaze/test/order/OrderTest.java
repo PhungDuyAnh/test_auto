@@ -12,72 +12,43 @@ public class OrderTest extends BaseTest {
     @Test(dataProvider = "loginData", dataProviderClass = DataProviders.class, groups = {"smoke"})
     public void testLoginSuccess(String username, String password) {
         homePage.clickLoginLink();
-        loginModal.login(username,password);
+        loginModal.loginSuccess(username, password);
         Assert.assertTrue(homePage.getNameOfUser().contains(username), "UserName must be displayed after login");
     }
 
-    @Test(priority = 2, dataProvider = "orderData", dataProviderClass = DataProviders.class)
+    @Test(dataProvider = "invalidLoginData", dataProviderClass = DataProviders.class, groups = {"negative"})
+    public void testLoginFail(String username, String password) {
+        homePage.clickLoginLink();
+        loginModal.loginFail(username, password);
+        String alertText = loginModal.getLoginAlertText();
+        Assert.assertEquals(alertText, "Wrong password.", "Alert message should match expected");
+    }
+
+    @Test(priority = 2, dataProvider = "orderData", dataProviderClass = DataProviders.class, groups = {"smoke"})
     public void testOrderSuccess(String name, String country, String city,
                                  String creditCard, String month, String year) {
-
-        // click product, add to cart, navigate to cart
         homePage.clickProductDetail();
         productDetailPage.clickAddToCartButton();
         productDetailPage.handleAlertAndAccept();
         homePage.clickCartLink();
-
         Assert.assertTrue(orderPage.isTotalPriceDisplayed(), "Total price must be displayed after add to cart");
-
         orderPage.clickPlaceOrderButton();
         informationOrderModal.inputOrderInformation(name, country, city, creditCard, month, year);
+        informationOrderModal.clickButtonPurchaseOrderSuccess();
+        informationOrderModal.clickOKButton();
     }
 
-//    @Test(priority = 2)
-//    public void testOrderWithMissingName() {
-//        homePage.clickProductDetail();
-//        productDetailPage.clickAddToCartButton();
-//        productDetailPage.handleAlertAndAccept();
-//        homePage.clickCartLink();
-//        orderPage.clickPlaceOrderButton();
-//        informationOrderModal.inputOrderInformation("", "VN", "HN", "01230120321", "09", "2025");
-//        Assert.assertTrue(informationOrderModal.isErrorMessageDisplayed(), "Error message must be displayed when name is missing");
-//    }
-//
-//    @Test(priority = 3)
-//    public void testOrderWithInvalidCreditCard() {
-//        homePage.clickProductDetail();
-//        productDetailPage.clickAddToCartButton();
-//        productDetailPage.handleAlertAndAccept();
-//        homePage.clickCartLink();
-//        orderPage.clickPlaceOrderButton();
-//        informationOrderModal.inputOrderInformation("DuyAnh", "VN", "HN", "invalid_card", "09", "2025");
-//        Assert.assertTrue(informationOrderModal.isErrorMessageDisplayed(), "Error message must be displayed for invalid credit card");
-//    }
-//
-//    @Test(priority = 4)
-//    public void testOrderWithEmptyCart() {
-//        homePage.clickCartLink();
-//        Assert.assertFalse(orderPage.isTotalPriceDisplayed(), "Total price should not be displayed for empty cart");
-//        orderPage.clickPlaceOrderButton();
-//        Assert.assertTrue(informationOrderModal.isErrorMessageDisplayed(), "Error message must be displayed when placing order with empty cart");
-//    }
-//
-//    @Test(priority = 5)
-//    public void testAddMultipleProductsAndCheckTotal() {
-//        homePage.clickProductDetail();
-//        productDetailPage.clickAddToCartButton();
-//        productDetailPage.handleAlertAndAccept();
-//        homePage.clickProductDetail(); // giả sử click lại sẽ chọn sản phẩm khác
-//        productDetailPage.clickAddToCartButton();
-//        productDetailPage.handleAlertAndAccept();
-//        homePage.clickCartLink();
-//        Assert.assertTrue(orderPage.isTotalPriceDisplayed(), "Total price must be displayed after adding multiple products");
-//        Assert.assertTrue(orderPage.getTotalPrice() > 0, "Total price must be greater than 0");
-//    }
-
-//    @Test(priority = 6)
-//    public void testLogout() {
-//        homePage.clickLogoutLink();
-//        Assert.assertFalse(homePage.isUserLoggedIn(), "User should not be logged in after logout");
-//    }
+    @Test(priority = 3, dataProvider = "emptyOrderData", dataProviderClass = DataProviders.class, groups = {"negative"})
+    public void testOrderWithEmptyFields(String name, String country, String city,
+                                         String creditCard, String month, String year) {
+        homePage.clickProductDetail();
+        productDetailPage.clickAddToCartButton();
+        productDetailPage.handleAlertAndAccept();
+        homePage.clickCartLink();
+        orderPage.clickPlaceOrderButton();
+        informationOrderModal.inputOrderInformation(name, country, city, creditCard, month, year);
+        informationOrderModal.clickButtonPurchaseOrderFail();
+        String alertText = informationOrderModal.getOrderAlterText();
+        Assert.assertEquals(alertText, "Please fill out Name and Creditcard.", "Alert message should match expected");
+    }
 }

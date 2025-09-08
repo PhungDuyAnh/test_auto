@@ -16,17 +16,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Optional;
 import demoblaze.pages.HomePage;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.OutputType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.time.Duration;
 
 public class BaseTest {
@@ -91,5 +82,10 @@ public class BaseTest {
     // Screenshot helper for listener
     public String takeScreenshot(String name) {
         return ScreenshotUtils.takeScreenshot(driver, name);
+    }
+
+    // Hàm lấy driver cho các class khác nếu cần
+    public WebDriver getDriver() {
+        return driver;
     }
 }

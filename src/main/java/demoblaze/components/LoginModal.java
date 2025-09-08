@@ -44,15 +44,28 @@ public class LoginModal extends BasePage {
         set(passwordField, password);
     }
 
+    public String getLoginAlertText() {
+        return getAlertTextAndAccept();
+    }
+
     public void clickLoginButton() {
         click(loginButton);
-        waitForModalInvisible();
     }
 
     // Convenience: login method
-    public void login(String username, String password) {
+    // Đăng nhập thành công: chờ modal invisible
+    public void loginSuccess(String username, String password) {
         enterUsername(username);
         enterPassword(password);
         clickLoginButton();
+        waitForModalInvisible();
+    }
+
+    // Đăng nhập thất bại: không chờ modal invisible, xử lý alert ngay
+    public void loginFail(String username, String password) {
+        enterUsername(username);
+        enterPassword(password);
+        clickLoginButton();
+        // Không gọi waitForModalInvisible
     }
 }

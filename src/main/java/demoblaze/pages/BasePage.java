@@ -43,6 +43,14 @@ public class BasePage {
         alert.accept();
     }
 
+    // Lấy nội dung alert và accept
+    protected String getAlertTextAndAccept() {
+        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+        String text = alert.getText();
+        alert.accept();
+        return text;
+    }
+
     protected void click(WebElement element) {
         try {
             waitForClickable(element).click();
@@ -132,5 +140,15 @@ public class BasePage {
     // File upload
     protected void uploadFile(WebElement element, String filePath) {
         waitForVisibility(element).sendKeys(filePath);
+    }
+
+    // Chờ element xuất hiện trên DOM
+    protected WebElement waitForElementPresent(By by) {
+        return wait.until(ExpectedConditions.presenceOfElementLocated(by));
+    }
+
+    // Chờ text xuất hiện trong element
+    protected boolean waitForText(WebElement element, String text) {
+        return wait.until(ExpectedConditions.textToBePresentInElement(element, text));
     }
 }
