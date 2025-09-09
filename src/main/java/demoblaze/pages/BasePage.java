@@ -68,7 +68,11 @@ public class BasePage {
     protected void set(WebElement element, String value) {
         WebElement el = waitForVisibility(element);
         el.clear();
-        el.sendKeys(value);
+        if (value == null || "[empty]".equals(value)) {
+            el.sendKeys("");
+        } else {
+            el.sendKeys(value);
+        }
     }
 
     protected String getText(WebElement element) {
